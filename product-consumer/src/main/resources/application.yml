@@ -1,0 +1,63 @@
+server:
+  port: 8083
+
+dubbo:
+  application:
+    name: product-consumers
+    qos-enable: false
+  protocols:
+    tri:
+      name: tri
+      port: 28083
+  registry:
+    address: nacos://127.0.0.1:8848
+    group: SEATA_GROUP
+    username: nacos
+    password: develop@1234
+  scan:
+    base-packages: com.example.product.service
+
+spring:
+  application:
+    name: product-consumers
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_URL:127.0.0.1}:${DATABASE_PORT:3306}/seata_demo?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false&connectionTimeZone=Asia/Shanghai
+    username: ${DATABASE_USERNAME:seata_demo}
+    password: ${DATABASE_PASSWORD:123456}
+
+  cloud:
+    nacos:
+      # Nacos ?????????
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: develop@1234
+        group: SEATA_GROUP
+        namespace: fdefe9be-c27a-445c-8c65-ede77355f83d
+      config:
+        import-check:
+          enabled: false
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+seata:
+  enable-auto-data-source-proxy: false
+  tx-service-group: my_test_tx_group
+  service:
+    vgroup-mapping:
+      my_test_tx_group: default
+  registry:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      application: seata-server
+      group: SEATA_GROUP
+      namespace: fdefe9be-c27a-445c-8c65-ede77355f83d
+      username: nacos
+      password: develop@1234
+
+
+
+

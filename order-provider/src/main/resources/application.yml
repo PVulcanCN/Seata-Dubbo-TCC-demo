@@ -1,0 +1,67 @@
+server:
+  port: 8019
+
+logging:
+  level:
+    root: info
+
+dubbo:
+  application:
+    name: order-provider
+    qos-enable: false
+  registry:
+    address: nacos://127.0.0.1:8848
+    username: nacos
+    password: nacos
+    group: SEATA_GROUP
+  scan:
+    base-packages: org.example.commom.dubbo
+  protocol:
+    name: dubbo
+    port: 18019
+  consumer:
+    check: false
+
+spring:
+  application:
+    name: order-provider
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_URL:127.0.0.1}:${DATABASE_PORT:3306}/seata_demo?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false&connectionTimeZone=Asia/Shanghai
+    username: ${DATABASE_USERNAME:seata_demo}
+    password: ${DATABASE_PASSWORD:123456}
+
+  cloud:
+    nacos:
+      # Nacos ?????????
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: nacos
+        group: SEATA_GROUP
+        namespace: fdefe9be-c27a-445c-8c65-ede77355f83d
+      config:
+        import-check:
+          enabled: false
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+seata:
+  enable-auto-data-source-proxy: false
+  tx-service-group: my_test_tx_group
+  service:
+    vgroup-mapping:
+      my_test_tx_group: default
+  registry:
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      application: seata-server
+      group: SEATA_GROUP
+      namespace: fdefe9be-c27a-445c-8c65-ede77355f83d
+      username: nacos
+      password: nacos
+
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.order.mapper.OrderMapper">
+    <resultMap id="BaseResultMap" type="org.example.common.domain.Order">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="inner_order_no" jdbcType="VARCHAR" property="innerOrderNo"/>
+        <result column="order_status" jdbcType="VARCHAR" property="orderStatus"/>
+        <result column="pay_price" jdbcType="DECIMAL" property="payPrice"/>
+        <result column="is_lock" jdbcType="BIT" property="isLock"/>
+        <result column="is_delete" jdbcType="BIT" property="isDelete"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , inner_order_no, order_status,pay_price,is_lock
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from seata_demo.order
+        where inner_order_no = #{innerOrderNo,jdbcType=VARCHAR}
+    </select>
+
+
+    <insert id="insertSelective" parameterType="org.example.common.domain.Order">
+        insert into seata_demo.order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="innerOrderNo != null">
+                inner_order_no,
+            </if>
+            <if test="orderStatus != null">
+                order_status,
+            </if>
+            <if test="payPrice != null">
+                pay_price,
+            </if>
+            <if test="isLock != null">
+                is_lock,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="innerOrderNo != null">
+                #{innerOrderNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderStatus != null">
+                #{orderStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="payPrice != null">
+                #{payPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="isLock != null">
+                #{isLock,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="org.example.common.domain.Order">
+        update seata_demo.order
+        <set>
+            <if test="orderStatus != null">
+                order_status = #{orderStatus,jdbcType=VARCHAR},
+            </if>
+            <if test="payPrice != null">
+                pay_price = #{payPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="isLock != null">
+                is_lock = #{isLock,jdbcType=BIT},
+            </if>
+        </set>
+        where inner_order_no = #{innerOrderNo,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

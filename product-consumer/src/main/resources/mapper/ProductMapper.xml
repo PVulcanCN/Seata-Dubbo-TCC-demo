@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.product.mapper.ProductMapper">
+    <resultMap id="BaseResultMap" type="org.example.common.domain.Product">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="product_name" jdbcType="VARCHAR" property="productName"/>
+        <result column="sales_count" jdbcType="INTEGER" property="salesCount"/>
+        <result column="prem" jdbcType="DECIMAL" property="prem"/>
+        <result column="amnt" jdbcType="DECIMAL" property="amnt"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , product_name, sales_count,prem,amnt
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from seata_demo.product
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from product
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insertSelective" parameterType="org.example.common.domain.Product">
+        insert into seata_demo.product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="productName != null">
+                product_name,
+            </if>
+            <if test="saleCount != null">
+                sales_count,
+            </if>
+            <if test="prem != null">
+                prem,
+            </if>
+            <if test="amnt != null">
+                amnt,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="productName != null">
+                #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="saleCount != null">
+                #{saleCount,jdbcType=INTEGER},
+            </if>
+            <if test="prem != null">
+                #{prem,jdbcType=DECIMAL},
+            </if>
+            <if test="amnt != null">
+                #{amnt,jdbcType=DECIMAL},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="org.example.common.domain.Product">
+        update seata_demo.product
+        <set>
+            <if test="productName != null">
+                product_name = #{productName,jdbcType=VARCHAR},
+            </if>
+            <if test="salesCount != null">
+                sales_count = #{salesCount,jdbcType=INTEGER},
+            </if>
+            <if test="prem != null">
+                prem = #{prem,jdbcType=DECIMAL},
+            </if>
+            <if test="amnt != null">
+                amnt = #{amnt,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

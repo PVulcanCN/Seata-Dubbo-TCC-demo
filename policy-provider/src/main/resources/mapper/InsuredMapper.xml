@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.policy.mapper.InsuredMapper">
+    <resultMap id="BaseResultMap" type="org.example.common.domain.Insured">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="apply_from_id" jdbcType="VARCHAR" property="applyFromId"/>
+        <result column="insured_sex" jdbcType="VARCHAR" property="insuredSex"/>
+        <result column="insured_name" jdbcType="VARCHAR" property="insuredName"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , apply_from_id,insured_sex,insured_name
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from seata_demo.insured
+        where apply_from_id = #{applyFromId,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insertSelective" parameterType="org.example.common.domain.Insured">
+        insert into seata_demo.insured
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applyFromId != null">
+                apply_from_id,
+            </if>
+            <if test="insuredName != null">
+                insured_name,
+            </if>
+            <if test="insuredSex != null">
+                insured_sex,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applyFromId != null">
+                #{applyFromId,jdbcType=VARCHAR},
+            </if>
+            <if test="insuredName != null">
+                #{insuredName,jdbcType=VARCHAR},
+            </if>
+            <if test="insuredSex != null">
+                #{insuredSex,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="org.example.common.domain.Insured">
+        update seata_demo.insured
+        <set>
+            <if test="applyFromId != null">
+                apply_from_id = #{applyFromId,jdbcType=VARCHAR},
+            </if>
+            <if test="insuredName != null">
+                insured_name = #{insuredName,jdbcType=VARCHAR},
+            </if>
+            <if test="insuredSex != null">
+                insured_sex = #{insuredSex,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where apply_from_id = #{applyFromId,jdbcType=VARCHAR}
+    </update>
+
+</mapper>
